@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "A highly detailed overall description of the character only. Summarize the character's visual identity, apparent style, body proportions, pose, expression, clothing style, main colors, silhouette, mood, and key traits needed to recreate the character from text prompts alone. Do not describe background scenery, environmental objects, image numbers, filenames, reference labels, or metadata."
+    },
+    "object": {
+      "type": "array",
+      "description": "A detailed list of visible character-related elements. Include every character-focused visual element that is important for accurate reconstruction, covering the character's anatomy, facial features, hair, animal traits, body proportions, pose, expression, clothing, accessories, worn or attached items, markings, visible text, color accents, material details, folds, asymmetry, and small identity-defining features. Exclude background elements, environmental objects, image labels, metadata-like identifiers, and unrelated non-character objects unless they are physically worn by, held by, or directly attached to the character.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The English name of the visible character element. Use clear, specific, and semantically meaningful names that directly identify the character-related visual element without relying on vague, generic, or numbered labels."
+          },
+          "description": {
+            "type": "string",
+            "description": "A highly detailed visual description of this element. Describe the element's visible appearance in terms of color, shape, size, texture, material, stylization, line quality, lighting behavior, markings, decorations, folds, asymmetry, and identity-defining features. For body parts, describe proportions, softness, stylized anatomy, angles, expression-related details, and visible structural traits. For clothing or accessories, describe fabric, construction, fit, looseness, edges, layering, ornaments, patterns, text, overlap with nearby elements, and how the element supports the character's overall design. The description must be specific enough for an image generation model to recreate the element accurately from text alone."
+          },
+          "position": {
+            "type": "array",
+            "description": "A list of natural-language position descriptions for this element. Describe where the element appears on the character, its orientation, visibility, cropping, overlap, and spatial relationship to nearby character elements. Use relative placement based on the character's body, clothing, accessories, and viewer-facing direction when relevant. The position descriptions should make it clear how the element is arranged within the character design without using example-based placeholders.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "position"
+        ],
+        "propertyOrdering": [
+          "name",
+          "description",
+          "position"
+        ]
+      }
+    }
+  },
+  "required": [
+    "description",
+    "object"
+  ],
+  "propertyOrdering": [
+    "description",
+    "object"
+  ]
+}

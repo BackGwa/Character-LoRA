@@ -1,0 +1,210 @@
+# Character-LoRA
+
+Research on training character LoRA using prompt-guided synthetic image datasets without original training images.
+
+## Abstract
+
+This research examines whether a character LoRA model can be trained without including artist-created works in the training dataset. The proposed approach instead constructs a synthetic image dataset using structured text prompts and generative AI.
+
+The `BACKGWA` character was used as the case study. The publicly released LoRA model is available at [`BackGwa/Character-LoRA`](https://huggingface.co/BackGwa/Character-LoRA) on Hugging Face. The LoRA was trained on the SDXL-based [`BackGwa/LUMIERE-Q`](https://huggingface.co/BackGwa/LUMIERE-Q) model.
+
+The objective of this research is to examine a procedure for constructing character LoRA models while considering training rights, artistic style, and intellectual property. To this end, the research defines an experimental workflow consisting of image analysis, prompt structuring, synthetic image generation, image labeling, and LoRA training, without directly using materials created by the original artist.
+
+## Introduction
+
+Character LoRA is widely used to reproduce the appearance, clothing, and visual features of a specific character in text-to-image models. However, conventional training workflows often include artist-created works, such as original images, fan art, or commercial illustrations, in the dataset. This practice may raise issues related to copyright, the consent of the original creator, unauthorized learning of artistic style, and the rights associated with derivative works.
+
+To mitigate these issues, this research investigates an alternative workflow that does not directly train on materials created by the original artist. The central assumption is that a character's visual features can be converted into structured textual information and that LoRA training can be performed using only synthetic data generated from that information.
+
+### Research Objectives
+
+The objectives of this research are as follows.
+
+1. To design a character LoRA construction workflow that does not directly use the artist's original images.
+2. To examine whether key visual features can be reflected in synthetic images using only structured text prompts.
+3. To evaluate the reproducibility and limitations of training an SDXL-based LoRA using only a synthetic dataset.
+4. To propose an experimental approach for mitigating copyright and training-data usage concerns.
+
+## Theoretical Background
+
+LoRA is a training method that efficiently adapts an image generation model to a new concept by adding low-rank adaptation matrices to selected layers, rather than retraining the full set of model weights. This approach preserves most of the base model while enabling the model to learn visual concepts such as a specific character, style, or object with a relatively small amount of data.
+
+Character LoRA training typically uses multiple training images and corresponding captions to incorporate recurring visual elements into the model. Through this process, the model learns to associate repeated features, such as hair color, eye color, clothing, accessories, and silhouette, with a specific trigger prompt.
+
+However, because images are directly used as training data, this method may give rise to copyright and rights-related concerns. When human-created works such as original images, fan art, or commercial illustrations are included in the dataset, the consent of the original creator, unauthorized learning of artistic style, and the legal status of derivative works become central issues.
+
+Synthetic datasets are training datasets constructed through generative AI without directly collecting existing creative works. This research uses such synthetic data for character LoRA training and examines whether the main features of a character can be reproduced while reducing dependence on original images.
+
+## Methodology
+
+The overall workflow of this research consists of the following stages.
+
+```mermaid
+flowchart TD
+    A[Character reference image and supplementary description] --> B[Feature analysis with gemma-4-E4B-it]
+    B --> C[Structured JSON feature representation]
+    C --> D[Synthetic image generation with GPT Image 2]
+    D --> E[Image labeling with GPT-5.5]
+    E --> F[SDXL-based LoRA training]
+    F --> G[Output evaluation and limitation analysis]
+```
+
+### 1. Character Feature Analysis
+
+To construct prompts for describing the character, the character image and a predefined system prompt were provided to the locally executed `gemma-4-E4B-it` model. The purpose of this stage was to structure the character's main visual elements as text.
+
+The analysis used the instructions in [`assets/INSTRUCTION.md`](assets/INSTRUCTION.md) and the JSON structure defined in [`assets/schema.json`](assets/schema.json).
+
+The output was required to be structured JSON containing a top-level `description` and an `object` list. The `description` field provides summary information to be considered when generating images, such as the character's overall appearance, pose, and visual impression.
+
+The `object` field is a list of individual visual elements that constitute the character. Each item includes `name`, `description`, and `position`, and specifies what the element is, how it appears, and how it is arranged in relation to the character.
+
+Because image input alone may not allow the model to distinguish persistent character traits from image-specific expressions, supplementary information was provided together with the image. This included the character name, features that must be preserved, and details requiring interpretation, so that the resulting JSON could be used directly in the subsequent image generation stage.
+
+### 2. Synthetic Image Dataset Construction
+
+The synthetic image dataset was generated using GPT Image 2 based on the structured JSON output from the character feature analysis stage. No images created by the artist were used as training data in this process.
+
+A total of 80 synthetic images were generated as training candidates. Among them, 48 images were selected for the final dataset based on consistency and quality.
+
+### 3. Image Labeling
+
+The generated synthetic images were labeled after generation using GPT-5.5. The labels describe the character's expression, pose, composition, and other visible attributes in each image.  
+The following chart shows the frequency of all tags used in the labeled dataset.
+
+```mermaid
+gantt
+    title Tag Frequencies
+    dateFormat X
+    axisFormat %s
+
+    section Count
+    backgwa : 0, 48
+    looking at viewer : 0, 48
+    simple background : 0, 48
+    solo : 0, 48
+    white background : 0, 48
+    closed mouth : 0, 37
+    full body : 0, 34
+    sitting : 0, 19
+    smile : 0, 16
+    blush : 0, 14
+    hands between legs : 0, 12
+    open mouth : 0, 11
+    standing : 0, 9
+    kneeling : 0, 8
+    upper body : 0, 8
+    feet together : 0, 7
+    crossed legs : 0, 6
+    cowboy shot : 0, 4
+    from above : 0, 4
+    hand near face : 0, 4
+    knee up : 0, 4
+    leaning forward : 0, 4
+    one knee up : 0, 4
+    hands on lap : 0, 3
+    hugging own legs : 0, 3
+    legs folded : 0, 3
+    squatting : 0, 3
+    close-up : 0, 2
+    hand near mouth : 0, 2
+    hand on own chin : 0, 2
+    head tilt : 0, 2
+    hugging own leg : 0, 2
+    knees up : 0, 2
+    leg up : 0, 2
+    side view : 0, 2
+    sitting on heels : 0, 2
+    arms at sides : 0, 1
+    feet to side : 0, 1
+    feet up : 0, 1
+    hand on hip : 0, 1
+    hand on own chest : 0, 1
+    hands behind back : 0, 1
+    hands near face : 0, 1
+    hands on own knees : 0, 1
+    hands up : 0, 1
+    head on hands : 0, 1
+    knees together : 0, 1
+    legs apart : 0, 1
+    legs extended : 0, 1
+    looking back : 0, 1
+    lying on stomach : 0, 1
+    one eye closed : 0, 1
+    outstretched arm : 0, 1
+    outstretched arms : 0, 1
+    paw pose : 0, 1
+    peace sign : 0, 1
+    pointing at viewer : 0, 1
+    raised hand : 0, 1
+    reaching : 0, 1
+    straight-on : 0, 1
+    v : 0, 1
+```
+
+### 4. LoRA Training
+
+The LoRA was trained using `sd-scripts` with the SDXL-based `BackGwa/LUMIERE-Q` model. The main training settings described in the public model card are as follows.
+
+| Item | Value |
+| --- | --- |
+| Base Model | `BackGwa/LUMIERE-Q` |
+| Dataset size | 48 |
+| Resolution | `1024x1024` |
+| repeats | `10` |
+| epochs | `10` |
+
+### 5. Output Evaluation and Limitation Analysis
+
+The trained LoRA was evaluated by combining the same trigger prompt with various poses, compositions, and quality tags. The evaluation focused on whether the core character features were preserved, how consistently the model responded to prompt variations, and how noise or distortion originating from the synthetic dataset affected the generated outputs.
+
+## Results
+
+This research confirmed that the main features of a character can be incorporated into a LoRA model using only structured text prompts and an AI-generated synthetic image dataset, without directly using original reference images as training data.
+
+For characters with relatively simple and clearly defined appearances, the core features could be reproduced consistently through text-based reconstruction and synthetic data generation alone.
+
+However, characters with more complex designs showed lower reproducibility. This limitation appears to be related to the difficulty of representing all visual relationships through structured prompts alone, as well as the limited ability of the image generation model to maintain complex details consistently.
+
+## Discussion and Conclusion
+
+### Limitations
+
+This research has the following limitations.
+
+1. The quality of the dataset is highly dependent on the output quality of the synthetic image generation model.
+2. Some generated images contained shape distortion, visual degradation, or noise.
+3. Synthetic images produced with GPT Image 2 may include watermarks, which can reduce dataset quality.
+4. As character designs become more complex, it becomes difficult to preserve all visual features using structured text prompts alone.
+5. Because this research was conducted on a single character and a limited dataset, additional validation is required before generalizing the workflow to broader character LoRA training scenarios.
+
+### Conclusion
+
+This research demonstrates that the main visual features of a character can be reproduced in a LoRA model using only structured text prompts and a synthetic image dataset, without directly using original reference images as training data.
+
+The results indicate that, for characters with relatively simple and clearly defined visual features, major appearance elements can be reproduced consistently through text-based reconstruction. However, reproducibility decreased for characters with complex clothing structures, numerous decorative elements, or irregular forms.
+
+The research also observed that limitations of the synthetic image generation model can lead to shape degradation or noise in some images. In the case of the GPT Image 2-based synthetic data used in this research, image watermarks were also identified as a potential factor reducing dataset quality.
+
+During prompt reconstruction, providing detailed textual information about the character's visual design in addition to the image itself contributed to improving output quality. In the image generation stage, adding specifications for consistent outputs after constructing JSON-based structured prompts was also effective for producing a higher-quality synthetic dataset.
+
+Therefore, this research demonstrates the feasibility of constructing a character LoRA without directly training on original images created by human artists. Nevertheless, the reproducibility of complex characters, the quality of synthetic data, and the bias and output stability of image generation models remain important directions for future work.
+
+## Ethics and Responsibility Statement
+
+This repository and the accompanying research document are provided to explore methods for mitigating copyright and training-data usage concerns in character LoRA production. This research does not imply permission to use the original rights holder's copyright, trademarks, character rights, or other intellectual property without authorization, nor does it imply any license to use such rights or any waiver of those rights.
+
+Users must ensure that generated images and other derivative outputs do not infringe upon the rights, reputation, or legitimate interests of the original creator, character rights holders, or third parties. Users are also responsible for complying with applicable laws, platform policies, terms of service, and ethical standards. Any legal or social responsibility arising from the use of generated outputs rests with the user.
+
+## License
+
+This research document is released under the MIT License.  
+The referenced LoRA model is released under the CreativeML Open RAIL-M license.
+
+## References
+
+- Public example model: [`BackGwa/Character-LoRA`](https://huggingface.co/BackGwa/Character-LoRA)
+- Base model: [`BackGwa/LUMIERE-Q`](https://huggingface.co/BackGwa/LUMIERE-Q)
+- `gemma-4-E4B-it`: locally executed model used for initial prompt reconstruction
+- GPT Image 2: image generation model used to construct the synthetic image dataset
+- GPT-5.5: model used for synthetic image labeling
