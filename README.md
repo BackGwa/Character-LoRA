@@ -63,13 +63,13 @@ Because image input alone may not allow the model to distinguish persistent char
 
 ### 2. Synthetic Dataset Construction
 
-The synthetic image dataset was generated using GPT Image 2 based on the structured JSON output from the character feature analysis stage. No images created by the artist were used as training data in this process.
+The synthetic image dataset was generated using GPT Image 2 based on the structured JSON output from the character feature analysis stage. The JSON was provided directly as input to GPT Image 2. Where necessary, supplementary information was also provided alongside the JSON, and additional natural language instructions were included to control image quality and output consistency. No images created by the artist were used as training data in this process.
 
-A total of 80 synthetic images were generated as training candidates. Among them, 48 images were selected for the final dataset based on consistency and quality.
+A total of 80 synthetic images were generated as training candidates. Among them, 48 images were selected for the final dataset. The remaining 32 images were excluded on the grounds that they did not reflect the character's visual consistency, exhibited excessive distortion or insufficient quality, or contained damage or corruption in part of the image.
 
 ### 3. Image Labeling
 
-The generated synthetic images were labeled after generation using GPT-5.5. The labels describe the character's expression, pose, composition, and other visible attributes in each image.  
+The generated synthetic images were labeled after generation using GPT-5.5. Labels were formatted using the Danbooru tag convention, with individual tags separated by commas. The tags describe the visible attributes of the character in each image, including aspects such as expression, pose, and composition.  
 The following chart shows the frequency of all tags used in the labeled dataset.
 
 ![Tag Frequencies](assets/tag_frequencies.png)
@@ -112,27 +112,23 @@ This research has the following limitations.
 
 ### Conclusion
 
-This research demonstrates that the main visual features of a character can be reproduced in a LoRA model using only structured text prompts and a synthetic image dataset, without directly using original reference images as training data.
+This research demonstrates the feasibility of constructing a character LoRA without directly using original reference images as training data. The proposed workflow, consisting of model-assisted feature analysis, JSON-based prompt structuring, synthetic image generation, and automated labeling, provides an alternative approach to character LoRA construction that reduces reliance on human-created works.
 
-The results indicate that, for characters with relatively simple and clearly defined visual features, major appearance elements can be reproduced consistently through text-based reconstruction. However, reproducibility decreased for characters with complex clothing structures, numerous decorative elements, or irregular forms.
+The primary contribution of this research is the definition and experimental validation of this workflow. The results confirm that structured supplementary information provided alongside the reference image contributes to improved output quality during feature analysis, and that consistency specifications in the image generation stage are effective for reducing variation in the synthetic dataset.
 
-The research also observed that limitations of the synthetic image generation model can lead to shape degradation or noise in some images. In the case of the GPT Image 2-based synthetic data used in this research, image watermarks were also identified as a potential factor reducing dataset quality.
-
-During prompt reconstruction, providing detailed textual information about the character's visual design in addition to the image itself contributed to improving output quality. In the image generation stage, adding specifications for consistent outputs after constructing JSON-based structured prompts was also effective for producing a higher-quality synthetic dataset.
-
-Therefore, this research demonstrates the feasibility of constructing a character LoRA without directly training on original images created by human artists. Nevertheless, the reproducibility of complex characters, the quality of synthetic data, and the bias and output stability of image generation models remain important directions for future work.
+Future work should address the reproducibility challenges observed for characters with complex designs, explore methods for mitigating generation artifacts and watermarks in synthetic data, and extend validation to a broader set of characters and base models.
 
 ## Scope and Clarifications
 
-This research is not intended to imitate or learn the artistic style of a specific artist. This research examines a procedure for constructing a character LoRA without directly using images created by the original artist as training data. Therefore the purpose of this research is not to reproduce the artistic style of a specific artist.
+This research is not intended to imitate or learn the artistic style of a specific artist. This research examines a procedure for constructing a character LoRA without directly using images created by the original artist as training data. Therefore, the purpose of this research is not to reproduce the artistic style of a specific artist.
 
 The procedure used in this research converts the external visual components of a character into text and structured JSON. A synthetic image dataset is then generated from that information and used for LoRA training. The focus of this process is on recurring character design elements that can be identified across the character representation. The artistic style of a specific artist was not defined as a training objective and no experiment was conducted to evaluate such style reproduction.
 
-The approach proposed in this research does not imply freedom from rights-related or responsibility-related concerns. When a character has an original creator or rights holder the permissibility of using that character may still require legal and ethical review even if original images are not directly included in the training dataset.
+The approach proposed in this research does not imply freedom from rights-related or responsibility-related concerns. When a character has an original creator or rights holder, the permissibility of using that character may still require legal and ethical review, even if original images are not directly included in the training dataset.
 
-Accordingly this research examines an experimental procedure for reducing reliance on the direct use of artist-created images as training data. It does not claim that the right to use a specific character or its generated outputs is automatically obtained through this procedure. The results of this research should be understood as an examination of an alternative method for constructing training data in character LoRA production and do not replace legal judgment regarding infringement or permitted use.
+Accordingly, this research examines an experimental procedure for reducing reliance on the direct use of artist-created images as training data. It does not claim that the right to use a specific character or its generated outputs is automatically obtained through this procedure. The results of this research should be understood as an examination of an alternative method for constructing training data in character LoRA production and do not replace legal judgment regarding infringement or permitted use.
 
-Generated synthetic images and outputs from the trained LoRA may still raise separate responsibility issues depending on their actual use. Therefore users must independently review relevant standards and ethical considerations when applying the method described in this research to actual production or distribution.
+Generated synthetic images and outputs from the trained LoRA may still raise separate responsibility issues depending on their actual use. Therefore, users must independently review relevant standards and ethical considerations when applying the method described in this research to actual production or distribution.
 
 ## Ethics Statement
 
