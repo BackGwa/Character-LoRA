@@ -53,7 +53,7 @@ flowchart TD
 
 To construct prompts for describing the character, the character image and a predefined system prompt were provided to the locally executed `gemma-4-E4B-it` model. The purpose of this stage was to structure the character's main visual elements as text.
 
-The analysis used the instructions in [`assets/INSTRUCTION.md`](assets/INSTRUCTION.md) and the JSON structure defined in [`assets/schema.json`](assets/schema.json).
+The analysis used the instructions in [`prompts/INSTRUCTION.md`](prompts/INSTRUCTION.md) and the JSON structure defined in [`prompts/schema.json`](prompts/schema.json).
 
 The output was required to be structured JSON containing a top-level `description` and an `object` list. The `description` field provides summary information to be considered when generating images, such as the character's overall appearance, pose, and visual impression.
 
