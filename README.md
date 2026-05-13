@@ -72,75 +72,7 @@ A total of 80 synthetic images were generated as training candidates. Among them
 The generated synthetic images were labeled after generation using GPT-5.5. The labels describe the character's expression, pose, composition, and other visible attributes in each image.  
 The following chart shows the frequency of all tags used in the labeled dataset.
 
-```mermaid
-gantt
-    title Tag Frequencies
-    dateFormat X
-    axisFormat %s
-
-    section Count
-    backgwa : 0, 48
-    looking at viewer : 0, 48
-    simple background : 0, 48
-    solo : 0, 48
-    white background : 0, 48
-    closed mouth : 0, 37
-    full body : 0, 34
-    sitting : 0, 19
-    smile : 0, 16
-    blush : 0, 14
-    hands between legs : 0, 12
-    open mouth : 0, 11
-    standing : 0, 9
-    kneeling : 0, 8
-    upper body : 0, 8
-    feet together : 0, 7
-    crossed legs : 0, 6
-    cowboy shot : 0, 4
-    from above : 0, 4
-    hand near face : 0, 4
-    knee up : 0, 4
-    leaning forward : 0, 4
-    one knee up : 0, 4
-    hands on lap : 0, 3
-    hugging own legs : 0, 3
-    legs folded : 0, 3
-    squatting : 0, 3
-    close-up : 0, 2
-    hand near mouth : 0, 2
-    hand on own chin : 0, 2
-    head tilt : 0, 2
-    hugging own leg : 0, 2
-    knees up : 0, 2
-    leg up : 0, 2
-    side view : 0, 2
-    sitting on heels : 0, 2
-    arms at sides : 0, 1
-    feet to side : 0, 1
-    feet up : 0, 1
-    hand on hip : 0, 1
-    hand on own chest : 0, 1
-    hands behind back : 0, 1
-    hands near face : 0, 1
-    hands on own knees : 0, 1
-    hands up : 0, 1
-    head on hands : 0, 1
-    knees together : 0, 1
-    legs apart : 0, 1
-    legs extended : 0, 1
-    looking back : 0, 1
-    lying on stomach : 0, 1
-    one eye closed : 0, 1
-    outstretched arm : 0, 1
-    outstretched arms : 0, 1
-    paw pose : 0, 1
-    peace sign : 0, 1
-    pointing at viewer : 0, 1
-    raised hand : 0, 1
-    reaching : 0, 1
-    straight-on : 0, 1
-    v : 0, 1
-```
+![Tag Frequencies](assets/tag_frequencies.png)
 
 ### 4. LoRA Training
 
