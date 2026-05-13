@@ -16,7 +16,7 @@ Character LoRA is widely used to reproduce the appearance, clothing, and visual 
 
 To mitigate these issues, this research investigates an alternative workflow that does not directly train on materials created by the original artist. The central assumption is that a character's visual features can be converted into structured textual information and that LoRA training can be performed using only synthetic data generated from that information.
 
-### Research Objectives
+### Objectives
 
 The objectives of this research are as follows.
 
@@ -25,7 +25,7 @@ The objectives of this research are as follows.
 3. To evaluate the reproducibility and limitations of training an SDXL-based LoRA using only a synthetic dataset.
 4. To propose an experimental approach for mitigating copyright and training-data usage concerns.
 
-## Theoretical Background
+## Background
 
 LoRA is a training method that efficiently adapts an image generation model to a new concept by adding low-rank adaptation matrices to selected layers, rather than retraining the full set of model weights. This approach preserves most of the base model while enabling the model to learn visual concepts such as a specific character, style, or object with a relatively small amount of data.
 
@@ -46,10 +46,10 @@ flowchart TD
     C --> D[Synthetic image generation with GPT Image 2]
     D --> E[Image labeling with GPT-5.5]
     E --> F[SDXL-based LoRA training]
-    F --> G[Output evaluation and limitation analysis]
+    F --> G[Evaluation]
 ```
 
-### 1. Character Feature Analysis
+### 1. Feature Analysis
 
 To construct prompts for describing the character, the character image and a predefined system prompt were provided to the locally executed `gemma-4-E4B-it` model. The purpose of this stage was to structure the character's main visual elements as text.
 
@@ -61,7 +61,7 @@ The `object` field is a list of individual visual elements that constitute the c
 
 Because image input alone may not allow the model to distinguish persistent character traits from image-specific expressions, supplementary information was provided together with the image. This included the character name, features that must be preserved, and details requiring interpretation, so that the resulting JSON could be used directly in the subsequent image generation stage.
 
-### 2. Synthetic Image Dataset Construction
+### 2. Synthetic Dataset Construction
 
 The synthetic image dataset was generated using GPT Image 2 based on the structured JSON output from the character feature analysis stage. No images created by the artist were used as training data in this process.
 
@@ -144,17 +144,17 @@ gantt
 
 ### 4. LoRA Training
 
-The LoRA was trained using `sd-scripts` with the SDXL-based `BackGwa/LUMIERE-Q` model. The main training settings described in the public model card are as follows.
+The LoRA was trained using `sd-scripts` with the SDXL-based `BackGwa/LUMIERE-Q` model. The main training settings are summarized as follows. Parameters not listed in the table followed the default settings of `sd-scripts`.
 
 | Item | Value |
 | --- | --- |
 | Base Model | `BackGwa/LUMIERE-Q` |
 | Dataset size | 48 |
 | Resolution | `1024x1024` |
-| repeats | `10` |
-| epochs | `10` |
+| Repeats | `10` |
+| Epochs | `10` |
 
-### 5. Output Evaluation and Limitation Analysis
+### 5. Evaluation
 
 The trained LoRA was evaluated by combining the same trigger prompt with various poses, compositions, and quality tags. The evaluation focused on whether the core character features were preserved, how consistently the model responded to prompt variations, and how noise or distortion originating from the synthetic dataset affected the generated outputs.
 
@@ -162,11 +162,11 @@ The trained LoRA was evaluated by combining the same trigger prompt with various
 
 This research confirmed that the main features of a character can be incorporated into a LoRA model using only structured text prompts and an AI-generated synthetic image dataset, without directly using original reference images as training data.
 
-For characters with relatively simple and clearly defined appearances, the core features could be reproduced consistently through text-based reconstruction and synthetic data generation alone.
+Within the scope of this research, the results suggest that, for characters with relatively simple and clearly defined appearances, the core features could be reproduced consistently through text-based reconstruction and synthetic data generation alone.
 
-However, characters with more complex designs showed lower reproducibility. This limitation appears to be related to the difficulty of representing all visual relationships through structured prompts alone, as well as the limited ability of the image generation model to maintain complex details consistently.
+However, the results also suggest that characters with more complex designs may show lower reproducibility. This limitation appears to be related to the difficulty of representing all visual relationships through structured prompts alone, as well as the limited ability of the image generation model to maintain complex details consistently.
 
-## Discussion and Conclusion
+## Discussion
 
 ### Limitations
 
@@ -190,7 +190,19 @@ During prompt reconstruction, providing detailed textual information about the c
 
 Therefore, this research demonstrates the feasibility of constructing a character LoRA without directly training on original images created by human artists. Nevertheless, the reproducibility of complex characters, the quality of synthetic data, and the bias and output stability of image generation models remain important directions for future work.
 
-## Ethics and Responsibility Statement
+## Scope and Clarifications
+
+This research is not intended to imitate or learn the artistic style of a specific artist. This research examines a procedure for constructing a character LoRA without directly using images created by the original artist as training data. Therefore the purpose of this research is not to reproduce the artistic style of a specific artist.
+
+The procedure used in this research converts the external visual components of a character into text and structured JSON. A synthetic image dataset is then generated from that information and used for LoRA training. The focus of this process is on recurring character design elements that can be identified across the character representation. The artistic style of a specific artist was not defined as a training objective and no experiment was conducted to evaluate such style reproduction.
+
+The approach proposed in this research does not imply freedom from rights-related or responsibility-related concerns. When a character has an original creator or rights holder the permissibility of using that character may still require legal and ethical review even if original images are not directly included in the training dataset.
+
+Accordingly this research examines an experimental procedure for reducing reliance on the direct use of artist-created images as training data. It does not claim that the right to use a specific character or its generated outputs is automatically obtained through this procedure. The results of this research should be understood as an examination of an alternative method for constructing training data in character LoRA production and do not replace legal judgment regarding infringement or permitted use.
+
+Generated synthetic images and outputs from the trained LoRA may still raise separate responsibility issues depending on their actual use. Therefore users must independently review relevant standards and ethical considerations when applying the method described in this research to actual production or distribution.
+
+## Ethics Statement
 
 This repository and the accompanying research document are provided to explore methods for mitigating copyright and training-data usage concerns in character LoRA production. This research does not imply permission to use the original rights holder's copyright, trademarks, character rights, or other intellectual property without authorization, nor does it imply any license to use such rights or any waiver of those rights.
 
