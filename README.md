@@ -147,6 +147,6 @@ The referenced LoRA model is released under the CreativeML Open RAIL-M license.
 - Base model: [`BackGwa/LUMIERE-Q`](https://huggingface.co/BackGwa/LUMIERE-Q)
 - SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis, [`arXiv:2307.01952`](https://arxiv.org/abs/2307.01952)
 - `sd-scripts`: [`kohya-ss/sd-scripts`](https://github.com/kohya-ss/sd-scripts)
-- `gemma-4-E4B-it`: locally executed model used for initial prompt reconstruction, [google/gemma-4-E4B-it](https://huggingface.co/google/gemma-4-E4B-it)
+- `gemma-4-E4B-it`: locally executed model used for initial prompt reconstruction, [`google/gemma-4-E4B-it`](https://huggingface.co/google/gemma-4-E4B-it)
 - GPT Image 2: image generation model used to construct the synthetic image dataset, [Introducing ChatGPT images 2.0](https://openai.com/ko-KR/index/introducing-chatgpt-images-2-0/)
 - GPT-5.5: model used for synthetic image labeling, [Introducing GPT-5.5](https://openai.com/ko-KR/index/introducing-gpt-5-5/)
