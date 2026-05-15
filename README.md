@@ -67,12 +67,31 @@ The synthetic image dataset was generated using GPT Image 2 based on the structu
 
 A total of 80 synthetic images were generated as training candidates. Among them, 48 images were selected for the final dataset. The remaining 32 images were excluded on the grounds that they did not reflect the character's visual consistency, exhibited excessive distortion or insufficient quality, or contained damage or corruption in part of the image.
 
+#### Synthetic Dataset Overview
+
+The following figure presents the 48 synthetic images selected for the final training dataset in a 7x7 grid.
+
+![Synthetic Dataset](assets/figures/synthetic_dataset.png)
+
+As shown in the figure, the final dataset does not rely on a single composition. Instead, it includes multiple visual configurations, such as upper-body views, full-body views, seated poses, close-up views, and near-side-view compositions. This composition was intended to preserve the character's core visual attributes while reducing excessive bias toward a specific pose or framing pattern in the training data.
+
 ### 3. Image Labeling
 
 The generated synthetic images were labeled after generation using GPT-5.5. Labels were formatted using the Danbooru tag convention, with individual tags separated by commas. The tags describe the visible attributes of the character in each image, including aspects such as expression, pose, and composition.  
 The following chart shows the frequency of all tags used in the labeled dataset.
 
-![Tag Frequencies](assets/tag_frequencies.png)
+![Tag Frequencies](assets/figures/tag_frequencies.png)
+
+#### Dataset Label Density and Taxonomy
+
+For the 48 synthetic images selected for the final training dataset, this research examined both per-image label density and the distribution of label categories. Each label was designed to describe observable visual attributes in the image, including the character identifier, background condition, composition, facial expression, pose, and the position of the hands and legs. This labeling strategy was intended to reflect image-level variation in pose and expression within the training captions, rather than relying only on repeated character-name captions.
+
+| ![Caption Density Distribution](assets/figures/tag_count.png) | ![Label Taxonomy Coverage](assets/figures/tag_category.png) |
+| --- | --- |
+
+The two figures summarize the labeling structure of the final synthetic dataset. The left figure shows the distribution of the number of tags per image. Across the 48 images, the mean number of tags was approximately 10.42 and the median was 10. The minimum and maximum numbers of tags were 9 and 11, respectively, indicating that most images maintained a comparable level of caption density.
+
+The right figure presents the distribution of labels grouped by semantic category. Identity and background-related tags were included consistently across the dataset, while additional tags described expression, framing, pose, and limb or gesture information. This distribution indicates that the dataset was constructed to preserve core character-identifying information while also incorporating variation in composition and pose.
 
 ### 4. LoRA Training
 
@@ -85,6 +104,16 @@ The LoRA was trained using `sd-scripts` with the SDXL-based `BackGwa/LUMIERE-Q` 
 | Resolution | `1024x1024` |
 | Repeats | `10` |
 | Epochs | `10` |
+
+#### Training Bucket Distribution
+
+LoRA training in this research was performed using the bucket mechanism provided by `sd-scripts`. The synthetic dataset was not composed exclusively of square images; some images had portrait or landscape aspect ratios. Therefore, instead of forcing all images into a single resolution, the training process assigned images to multiple resolution buckets according to their aspect ratios.
+
+![Bucketed Training Sample Distribution](assets/figures/training_buckets.png)
+
+The figure shows the training bucket distribution extracted from the metadata of `BACKGWA.safetensors`. After accounting for dataset repeats, the training set consisted of 480 repeated training samples distributed across the `832x1216`, `896x1152`, `1024x1024`, and `1152x896` buckets. The largest number of samples was assigned to the `896x1152` bucket, followed by the `1024x1024` and `832x1216` buckets.
+
+This result suggests that the final training dataset did not rely on a single composition or aspect ratio. Bucket-based training also helps preserve the original framing and image proportions during training, allowing full-body, upper-body, seated, and close-up compositions to be represented more appropriately in the LoRA training process.
 
 ### 5. Evaluation
 
