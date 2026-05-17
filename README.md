@@ -180,3 +180,17 @@ The referenced LoRA model is released under the CreativeML Open RAIL-M license.
 - `gemma-4-E4B-it`: locally executed model used for initial prompt reconstruction, [`google/gemma-4-E4B-it`](https://huggingface.co/google/gemma-4-E4B-it)
 - GPT Image 2: image generation model used to construct the synthetic image dataset, [`Introducing ChatGPT images 2.0`](https://openai.com/index/introducing-chatgpt-images-2-0/)
 - GPT-5.5: model used for synthetic image labeling, [`Introducing GPT-5.5`](https://openai.com/index/introducing-gpt-5-5/)
+
+
+## Citation
+
+```
+@misc{backgwa_2026,
+	author       = { BACKGWA },
+	title        = { Character-LoRA (Revision 242bcf7) },
+	year         = 2026,
+	url          = { https://huggingface.co/BackGwa/Character-LoRA },
+	doi          = { 10.57967/hf/8830 },
+	publisher    = { Hugging Face }
+}
+```
