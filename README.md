@@ -175,6 +175,7 @@ The referenced LoRA model is released under the CreativeML Open RAIL-M license.
 ## References
 
 - Public example model: [`BackGwa/Character-LoRA`](https://huggingface.co/BackGwa/Character-LoRA)
+- Additional experiment on an Anima-based model: [`BackGwa/Character-LoRA-Anima`](https://huggingface.co/BackGwa/Character-LoRA-Anima), conducted to examine whether the proposed synthetic-dataset workflow can be applied to a non-SDXL model setting.
 - Base model: [`BackGwa/LUMIERE-Q`](https://huggingface.co/BackGwa/LUMIERE-Q)
 - LoRA: Low-Rank Adaptation of Large Language Models, [`arXiv:2106.09685`](https://arxiv.org/abs/2106.09685)
 - SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis, [`arXiv:2307.01952`](https://arxiv.org/abs/2307.01952)
